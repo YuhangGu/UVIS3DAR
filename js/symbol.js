@@ -424,7 +424,7 @@ function createTubesWidth(flow, dataEncoded, choosen_index) {
 
     if (dataFlows.city[flow.source.index] == "De Fryske Marren" ||
         dataFlows.city[flow.target.index] == "De Fryske Marren") {
-        console.log(flow)
+        //console.log(flow)
     }
 
     var color_Out = "#CC3300";
