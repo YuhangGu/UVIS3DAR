@@ -21,6 +21,8 @@ function loadData(callback){
             dataChord = chord(data.matrix);
 
             //Transposing
+
+            /*
             var matrix_T = data.matrix;
             matrix_T = matrix_T[0].map((col, i) => matrix_T.map(row => row[i]));
 
@@ -37,6 +39,7 @@ function loadData(callback){
             });
 
             dataChordC = chord(matrix_C);
+            */
         } );
 
 

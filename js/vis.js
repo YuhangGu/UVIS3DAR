@@ -89,12 +89,14 @@ var VIS = {
     linerScaleAngle2Z: null,
     linerScaleAngle2ZDouble: null,
 
+    scaleHeight: null,
+
     linerScaleGlMapZ: null,
     //maxGLMapZ: 100,
     maxGLMapZ: 0,
 
     //max for graphic
-    maxValueWidth: 30,
+    maxValueWidth: 20,
     maxValueZ: 1200,
 
     angle2heightZ: 1,
@@ -121,16 +123,8 @@ function initialize(callback) {
     VIS.color = createColorScale();
 
 
-
-    VIS.linerScaleWidth = createScaleLinerWidth();
-
-    VIS.linerScaleValue2Z = createScaleLinerHeight();
-
-    VIS.linerScaleGlMapZ = createScaleGlMapZ();
-
-    VIS.linerScaleAngle2Z = createScaleLinerAngleZ();
-
-    VIS.linerScaleAngle2ZDouble = createScaleLinerAngleZDouble();
+    VIS.scaleHeight = createScaleQuantizeHeight();
+    VIS.scaleWidth = createScaleQuantizeWidth();
 
     VIS.groupMapCityUI = createGroupforUI();
 
@@ -320,6 +314,58 @@ function initialize(callback) {
         return d3.scaleLinear().domain([0, d3.max(cityValue)]).range([0, VIS.maxGLMapZ]);
     }
 
+
+    function createScaleQuantizeHeight() {
+
+        var array = [].concat(...dataFlows.matrix).filter(d => d != 0);
+
+        array = array.sort((a, b) => { return a - b; });
+
+        var extent = d3.extent(array);
+        var mean = d3.mean(array);
+        var arr_left = array.filter(function(d) { return d <= mean });
+        var arr_right = array.filter(function(d) { return d > mean });
+        var mean_left = d3.mean(arr_left);
+        var mean_right = d3.mean(arr_right);
+
+        //console.log(sub.arr, arr_left, arr_right)
+        var classes = [ 1, mean_left, mean, mean_right];
+
+        var rangeSpace = [0,0.25,0.5,0.75,1];
+        rangeSpace = rangeSpace.map(d=>d*VIS.maxValueZ)
+
+
+        var scaleThreshold = d3.scaleThreshold().domain(classes).range(rangeSpace);
+
+        return scaleThreshold;
+    }
+
+    function createScaleQuantizeWidth() {
+
+        var array = [].concat(...dataFlows.matrix).filter(d => d != 0);
+
+        array = array.sort((a, b) => { return a - b; });
+
+        var extent = d3.extent(array);
+        var mean = d3.mean(array);
+        var arr_left = array.filter(function(d) { return d <= mean });
+        var arr_right = array.filter(function(d) { return d > mean });
+        var mean_left = d3.mean(arr_left);
+        var mean_right = d3.mean(arr_right);
+
+        //console.log(sub.arr, arr_left, arr_right)
+        var classes = [ 1, mean_left, mean, mean_right];
+
+        var rangeSpace = [0,0.25,0.5,0.75,1];
+        rangeSpace = rangeSpace.map(d=>d*VIS.maxValueWidth)
+
+
+        var scaleThreshold = d3.scaleThreshold().domain(classes).range(rangeSpace);
+
+        return scaleThreshold;
+    }
+
+
     function createScaleLinerHeight() {
 
         var max_overall = [];
@@ -483,16 +529,14 @@ function initBaseMap() {
             VIS.ctx.stroke();
         });
 
-        dataFlows.geo.features.forEach(function(d) {
-
+        dataFlows.geo.features.forEach(function(d, i) {
             var cityName = d.properties.gemeentena;
-
             VIS.ctx.fillStyle = "black";
             VIS.ctx.font = '40pt Arial';
             VIS.ctx.textAlign = "center";
             VIS.ctx.textBaseline = "middle";
-            VIS.ctx.fillText(cityName, VIS.centerOnTexture[cityName][0],
-                VIS.centerOnTexture[cityName][1]);
+            VIS.ctx.fillText(i+1, VIS.centerOnTexture[cityName][0] - 35, VIS.centerOnTexture[cityName][1] + 35);
+            //VIS.ctx.fillText(cityName, VIS.centerOnTexture[cityName][0], VIS.centerOnTexture[cityName][1]);
         });
 
         VIS.texture.needsUpdate = true;
@@ -524,8 +568,7 @@ function updateFlowMap(selectedCity) {
                     VIS.glScene.add(flow);
                 }
 
-            }
-            else if (flow.source.index === choosen_index || flow.target.index === choosen_index) {
+            } else if (flow.source.index === choosen_index || flow.target.index === choosen_index) {
                 var flow = getMeshFromFlow(flow, choosen_index, flow_index);
                 if (flow) {
                     flowsSet.push(flow);
@@ -537,7 +580,8 @@ function updateFlowMap(selectedCity) {
 
         update();
 
-    }createSemiCircleTubes
+    }
+    createSemiCircleTubes
 
     function clearScene() {
         flowsSet.forEach(function(d) {
