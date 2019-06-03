@@ -2,6 +2,55 @@
  * Created by Aero on 24/11/2018.
  */
 
+
+
+function creatLegends(representationCurr) {
+
+
+     switch (representationCurr) {
+
+        case 'height':
+            return createLegendHeight();
+            break;
+
+        case 'width':
+            return createLegendWidth();
+            break;
+    }
+
+    function createLegendHeight(){
+
+         var group = new THREE.Group();
+
+         console.log(VIS.scaleHeight.range() )
+
+
+         // var height = VIS.scaleHeight(item.value);
+
+
+
+
+
+         return group;
+
+    }
+
+    function createLegendWidth(){
+
+         var group = new THREE.Group();
+
+
+            console.log(VIS.scaleWidth.range() )
+         
+         return group;
+
+    }
+
+
+
+}
+
+
 function getMeshFromFlow(flow, choosen_index, flow_index) {
 
 
@@ -14,23 +63,22 @@ function getMeshFromFlow(flow, choosen_index, flow_index) {
 
 
         case 'height':
-            //return createSemiCircleTubes(flow, dataEncoded, choosen_index);
             return createTubes3DHeight(flow, dataEncoded, choosen_index);
             break;
 
         case 'width':
-            return createSemiCircleTubes(flow, dataEncoded, choosen_index);
-            break;
-
-        case 'width-2':
-            return createRibbons(flow, dataEncoded, choosen_index);
-            break;
-
-        case 'width-3':
             return createTubesWidth(flow, dataEncoded, choosen_index);
             break;
 
             /*
+            case 'width-2':
+                return createRibbons(flow, dataEncoded, choosen_index);
+                break;
+
+            case 'width-3':
+                return createSemiCircleTubes(flow, dataEncoded, choosen_index);
+                break;
+
             case '3Dheight':
                 return createTubes3DHeight(flow);
                 break;
@@ -56,17 +104,15 @@ function createRibbons(flow, dataEncoded, choosen_index) {
         case "all":
 
 
-
-
             if (choosen_index === flow.source.index) {
 
                 var meshS2T = new THREE.Mesh(createRibbonGeometry(flow.source, VIS.scaleWidth(flow.source.value)),
-                    new THREE.MeshBasicMaterial({ color: color_Out }));
+                    new THREE.MeshLambertMaterial({ color: color_Out }));
                 meshS2T.doubleSided = true;
                 group.add(meshS2T);
 
                 var meshT2S = new THREE.Mesh(createRibbonGeometry(flow.target, VIS.scaleWidth(flow.target.value)),
-                    new THREE.MeshBasicMaterial({ color: color_In }));
+                    new THREE.MeshLambertMaterial({ color: color_In }));
                 meshT2S.doubleSided = true;
                 group.add(meshT2S);
 
@@ -75,13 +121,13 @@ function createRibbons(flow, dataEncoded, choosen_index) {
             } else if (choosen_index === flow.target.index) {
 
                 var meshS2T = new THREE.Mesh(createRibbonGeometry(flow.source, VIS.scaleWidth(flow.source.value)),
-                    new THREE.MeshBasicMaterial({ color: color_In }));
+                    new THREE.MeshLambertMaterial({ color: color_In }));
                 meshS2T.doubleSided = true;
                 group.add(meshS2T);
 
 
                 var meshT2S = new THREE.Mesh(createRibbonGeometry(flow.target, VIS.scaleWidth(flow.target.value)),
-                    new THREE.MeshBasicMaterial({ color: color_Out }));
+                    new THREE.MeshLambertMaterial({ color: color_Out }));
                 meshT2S.doubleSided = true;
                 group.add(meshT2S);
                 return group;
@@ -94,7 +140,7 @@ function createRibbons(flow, dataEncoded, choosen_index) {
             if (choosen_index === flow.source.index && flow.source.value != 0) {
 
                 var meshS2T = new THREE.Mesh(createRibbonGeometry(flow.source, VIS.scaleWidth(flow.source.value)),
-                    new THREE.MeshBasicMaterial({ color: color_Out }));
+                    new THREE.MeshLambertMaterial({ color: color_Out }));
                 meshS2T.doubleSided = true;
                 group.add(meshS2T);
                 return group;
@@ -102,7 +148,7 @@ function createRibbons(flow, dataEncoded, choosen_index) {
             } else if (choosen_index === flow.target.index && flow.target.value != 0) {
 
                 var meshT2S = new THREE.Mesh(createRibbonGeometry(flow.target, VIS.scaleWidth(flow.target.value)),
-                    new THREE.MeshBasicMaterial({ color: color_Out }));
+                    new THREE.MeshLambertMaterial({ color: color_Out }));
                 meshT2S.doubleSided = true;
                 group.add(meshT2S);
                 return group;
@@ -117,7 +163,7 @@ function createRibbons(flow, dataEncoded, choosen_index) {
             if (choosen_index === flow.source.index && flow.target.value != 0) {
 
                 var meshS2T = new THREE.Mesh(createRibbonGeometry(flow.target, VIS.scaleWidth(flow.target.value)),
-                    new THREE.MeshBasicMaterial({ color: color_In }));
+                    new THREE.MeshLambertMaterial({ color: color_In }));
                 meshS2T.doubleSided = true;
                 group.add(meshS2T);
                 return group;
@@ -125,7 +171,7 @@ function createRibbons(flow, dataEncoded, choosen_index) {
             } else if (choosen_index === flow.target.index && flow.source.value != 0) {
 
                 var meshT2S = new THREE.Mesh(createRibbonGeometry(flow.source, VIS.scaleWidth(flow.source.value)),
-                    new THREE.MeshBasicMaterial({ color: color_In }));
+                    new THREE.MeshLambertMaterial({ color: color_In }));
                 meshT2S.doubleSided = true;
                 group.add(meshT2S);
                 return group;
@@ -145,7 +191,7 @@ function createRibbons(flow, dataEncoded, choosen_index) {
                 createRibbonGeometry(flow.source, width) :
                 createRibbonGeometry(flow.target, width);
 
-            var mesh = new THREE.Mesh(geo, new THREE.MeshBasicMaterial({ color: color }));
+            var mesh = new THREE.Mesh(geo, new THREE.MeshLambertMaterial({ color: color }));
             mesh.doubleSided = true;
             group.add(mesh);
             return group;
@@ -413,7 +459,7 @@ function createSemiCircleTubes(flow, dataEncoded, choosen_index) {
 
 
         var meshS2T = new THREE.Mesh(tubeGeometry,
-            new THREE.MeshBasicMaterial({ color: color }));
+            new THREE.MeshLambertMaterial({ color: color }));
         meshS2T.doubleSided = true;
 
         return meshS2T;
@@ -422,10 +468,6 @@ function createSemiCircleTubes(flow, dataEncoded, choosen_index) {
 
 function createTubesWidth(flow, dataEncoded, choosen_index) {
 
-    if (dataFlows.city[flow.source.index] == "De Fryske Marren" ||
-        dataFlows.city[flow.target.index] == "De Fryske Marren") {
-        //console.log(flow)
-    }
 
     var color_Out = "#CC3300";
     var color_In = "#0099CC";
@@ -488,7 +530,7 @@ function createTubesWidth(flow, dataEncoded, choosen_index) {
         var origin = VIS.PositionsOD[dataFlows.city[item.index]],
             destination = VIS.PositionsOD[dataFlows.city[item.subindex]];
 
-        var height = VIS.maxValueZ/2;
+        var height = VIS.maxValueZ / 2;
 
         var tubeRadius = VIS.scaleWidth(item.value);
 
@@ -510,7 +552,7 @@ function createTubesWidth(flow, dataEncoded, choosen_index) {
         var tubeGeometry = new THREE.TubeBufferGeometry(curve, 20, tubeRadius, 8, false);
 
         var mesh = new THREE.Mesh(tubeGeometry,
-            new THREE.MeshBasicMaterial({ color: color }));
+            new THREE.MeshLambertMaterial({ color: color }));
 
         mesh.doubleSided = true;
 
@@ -520,11 +562,6 @@ function createTubesWidth(flow, dataEncoded, choosen_index) {
 }
 
 function createTubes3DHeight(flow, dataEncoded, choosen_index) {
-
-    if (dataFlows.city[flow.source.index] == "De Fryske Marren" ||
-        dataFlows.city[flow.target.index] == "De Fryske Marren") {
-        console.log(flow)
-    }
 
     var color_Out = "#CC3300";
     var color_In = "#0099CC";
@@ -599,7 +636,7 @@ function createTubes3DHeight(flow, dataEncoded, choosen_index) {
         var tubeGeometry = new THREE.TubeBufferGeometry(spline, 20, tubeRadius, 8, false);
 
         var mesh = new THREE.Mesh(tubeGeometry,
-            new THREE.MeshBasicMaterial({ color: color }));
+            new THREE.MeshLambertMaterial({ color: color }));
 
         mesh.doubleSided = true;
 
@@ -630,10 +667,10 @@ function createTubes3DHeight(flow, dataEncoded, choosen_index) {
         //var points = curve.getPoints(50);
         //var geometry = new THREE.BufferGeometry().setFromPoints(points);
 
-        var tubeGeometry = new THREE.TubeBufferGeometry(curve, 20, tubeRadius, 8, false);
+        var tubeGeometry = new THREE.TubeBufferGeometry(curve, 80, tubeRadius, 8, false);
 
         var mesh = new THREE.Mesh(tubeGeometry,
-            new THREE.MeshBasicMaterial({ color: color }));
+            new THREE.MeshLambertMaterial({ color: color }));
 
         mesh.doubleSided = true;
 
@@ -892,7 +929,7 @@ function createSemiCircleTubes_bak(flow, dataEncoded, choosen_index) {
 
 
         var meshS2T = new THREE.Mesh(tubeGeometry,
-            new THREE.MeshBasicMaterial({ color: color }));
+            new THREE.MeshLambertMaterial({ color: color }));
         meshS2T.doubleSided = true;
 
         return meshS2T;

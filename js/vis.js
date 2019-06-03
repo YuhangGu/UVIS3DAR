@@ -5,6 +5,8 @@
 var INTERSECTED;
 var citySelectedCurr = "ALL";
 
+var representationCurr =  $('input[name="layercontrol"]:checked').val();
+
 
 if ($('input[name="municipality"]:checked').val() == "Utrecht") {
     citySelectedCurr = "Utrecht";
@@ -96,7 +98,7 @@ var VIS = {
     maxGLMapZ: 0,
 
     //max for graphic
-    maxValueWidth: 20,
+    maxValueWidth: 30,
     maxValueZ: 1200,
 
     angle2heightZ: 1,
@@ -241,11 +243,14 @@ function initialize(callback) {
         }
 
         function addLights() {
-            var ambientLight = new THREE.AmbientLight(0x445555);
+
+            var ambientLight = new THREE.AmbientLight(0xffffff);
             VIS.glScene.add(ambientLight);
+
             var directionalLight = new THREE.DirectionalLight(0xffffff);
             directionalLight.position.set(1000, -2, 10).normalize();
             VIS.glScene.add(directionalLight);
+
         }
 
         function addController() {
@@ -356,7 +361,7 @@ function initialize(callback) {
         //console.log(sub.arr, arr_left, arr_right)
         var classes = [ 1, mean_left, mean, mean_right];
 
-        var rangeSpace = [0,0.25,0.5,0.75,1];
+        var rangeSpace = [0,0.2,0.5,0.8, 1];
         rangeSpace = rangeSpace.map(d=>d*VIS.maxValueWidth)
 
 
@@ -469,7 +474,7 @@ function initBaseMap() {
             })
             .on("dblclick", function(d) {
 
-                if (d.properties.gemeentena === selectedCityName) {
+                if (d.properties.gemeentena === citySelectedCurr) {
                     updateFlowMap('ALL');
                     citySelectedCurr = 'ALL';
                 } else {
@@ -545,9 +550,13 @@ function initBaseMap() {
 }
 
 
-
-
 function updateFlowMap(selectedCity) {
+
+     if($('input[name="layercontrol"]:checked').val() != representationCurr){
+        representationCurr = $('input[name="layercontrol"]:checked').val()
+        updateLegend(representationCurr);
+     }
+
 
     if (selectedCity === "ALL") {
         draw3DFlows(SHOW_ALL_FLOWS);
@@ -581,7 +590,6 @@ function updateFlowMap(selectedCity) {
         update();
 
     }
-    createSemiCircleTubes
 
     function clearScene() {
         flowsSet.forEach(function(d) {
@@ -597,6 +605,13 @@ function updateFlowMap(selectedCity) {
             }
             VIS.glScene.remove(d);
         });
+    }
+
+
+    function updateLegend(representationCurr){
+
+
+        VIS.glScene.add( creatLegends(representationCurr) )
     }
 
 }

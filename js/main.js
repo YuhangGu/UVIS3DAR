@@ -9,24 +9,11 @@ var dataChordC;
 
 
 var flowsSet = [];
-var cylinderODSet = [];
+var legendSet = [];
 
-var cylinderODSetForGroupDirection = [];
-
-var cylinderODSetForGroupNode = [];
-
-var barODSet = [];
-var pieODSet = [];
-
-var selectedCityName = '';
-
-
-//var typeOf3DFlow = "line";
-var typeOf3DFlow = "tube";
 
 const SHOW_ALL_FLOWS = -5;
 var font = null;
-
 
 const DEGS_TO_RADS = Math.PI / 180,
     UNIT_SIZE = 100;
