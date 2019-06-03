@@ -5,7 +5,7 @@
 var INTERSECTED;
 var citySelectedCurr = "ALL";
 
-var representationCurr =  $('input[name="layercontrol"]:checked').val();
+var representationCurr = $('input[name="layercontrol"]:checked').val();
 
 
 if ($('input[name="municipality"]:checked').val() == "Utrecht") {
@@ -334,10 +334,10 @@ function initialize(callback) {
         var mean_right = d3.mean(arr_right);
 
         //console.log(sub.arr, arr_left, arr_right)
-        var classes = [ 1, mean_left, mean, mean_right];
+        var classes = [1, mean_left, mean, mean_right];
 
-        var rangeSpace = [0,0.25,0.5,0.75,1];
-        rangeSpace = rangeSpace.map(d=>d*VIS.maxValueZ)
+        var rangeSpace = [0, 0.25, 0.5, 0.75, 1];
+        rangeSpace = rangeSpace.map(d => d * VIS.maxValueZ)
 
 
         var scaleThreshold = d3.scaleThreshold().domain(classes).range(rangeSpace);
@@ -359,10 +359,10 @@ function initialize(callback) {
         var mean_right = d3.mean(arr_right);
 
         //console.log(sub.arr, arr_left, arr_right)
-        var classes = [ 1, mean_left, mean, mean_right];
+        var classes = [1, mean_left, mean, mean_right];
 
-        var rangeSpace = [0,0.2,0.5,0.8, 1];
-        rangeSpace = rangeSpace.map(d=>d*VIS.maxValueWidth)
+        var rangeSpace = [0, 0.2, 0.5, 0.8, 1];
+        rangeSpace = rangeSpace.map(d => d * VIS.maxValueWidth)
 
 
         var scaleThreshold = d3.scaleThreshold().domain(classes).range(rangeSpace);
@@ -540,7 +540,7 @@ function initBaseMap() {
             VIS.ctx.font = '40pt Arial';
             VIS.ctx.textAlign = "center";
             VIS.ctx.textBaseline = "middle";
-            VIS.ctx.fillText(i+1, VIS.centerOnTexture[cityName][0] - 35, VIS.centerOnTexture[cityName][1] + 35);
+            VIS.ctx.fillText(i + 1, VIS.centerOnTexture[cityName][0] - 35, VIS.centerOnTexture[cityName][1] + 35);
             //VIS.ctx.fillText(cityName, VIS.centerOnTexture[cityName][0], VIS.centerOnTexture[cityName][1]);
         });
 
@@ -552,10 +552,8 @@ function initBaseMap() {
 
 function updateFlowMap(selectedCity) {
 
-     if($('input[name="layercontrol"]:checked').val() != representationCurr){
-        representationCurr = $('input[name="layercontrol"]:checked').val()
-        updateLegend(representationCurr);
-     }
+
+    updateLegend($('input[name="layercontrol"]:checked').val());
 
 
     if (selectedCity === "ALL") {
@@ -608,10 +606,26 @@ function updateFlowMap(selectedCity) {
     }
 
 
-    function updateLegend(representationCurr){
+    function updateLegend(representationCurr) {
+
+        legendSet.forEach(function(d) {
+            if (d.type === "Group") {
+
+                d.children.forEach(function(t) {
+                    t.material.dispose();
+                    t.geometry.dispose();
+                });
+                for (let i = d.children.length - 1; i >= 0; i--) {
+                    d.remove(d.children[i]);
+                }
+            }
+            VIS.glScene.remove(d);
+        });
 
 
-        VIS.glScene.add( creatLegends(representationCurr) )
+        var legend = creatLegends(representationCurr);
+        legendSet.push(legend);
+        VIS.glScene.add(legend);
     }
 
 }

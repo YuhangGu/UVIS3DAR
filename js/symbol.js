@@ -7,7 +7,7 @@
 function creatLegends(representationCurr) {
 
 
-     switch (representationCurr) {
+    switch (representationCurr) {
 
         case 'height':
             return createLegendHeight();
@@ -18,31 +18,56 @@ function creatLegends(representationCurr) {
             break;
     }
 
-    function createLegendHeight(){
+    function createLegendHeight() {
 
-         var group = new THREE.Group();
+        var group = new THREE.Group();
 
-         console.log(VIS.scaleHeight.range() )
-
-
-         // var height = VIS.scaleHeight(item.value);
+        console.log(VIS.scaleHeight.range());
 
 
+        // var height = VIS.scaleHeight(item.value);
+
+        VIS.scaleHeight.range().forEach(function(d, i) {
+
+            if (i != 0) {
+
+                var geometry = new THREE.CylinderGeometry(VIS.maxValueWidth/2, VIS.maxValueWidth/2, d, 32);
+                var material = new THREE.MeshLambertMaterial({ color: 0XCC6600 });
+                var cylinder = new THREE.Mesh(geometry, material);
+                cylinder.rotateX(Math.PI/2);
+                cylinder.position.set( VIS.map_length/2 - 100 * i , VIS.map_width/2 -400 , d/2);
+                group.add(cylinder);
+            }
+
+        });
 
 
-
-         return group;
+        return group;
 
     }
 
-    function createLegendWidth(){
+    function createLegendWidth() {
 
-         var group = new THREE.Group();
+        var group = new THREE.Group();
 
 
-            console.log(VIS.scaleWidth.range() )
-         
-         return group;
+        console.log(VIS.scaleWidth.range());
+
+        VIS.scaleWidth.range().forEach(function(d, i) {
+
+            if (i != 0) {
+
+                var geometry = new THREE.CylinderGeometry(d, d, VIS.maxValueZ/2, 32);
+                var material = new THREE.MeshLambertMaterial({ color: 0XCC6600 });
+                var cylinder = new THREE.Mesh(geometry, material);
+                cylinder.rotateX(Math.PI/2);
+                cylinder.position.set( VIS.map_length/2 - 100 * i , VIS.map_width/2 -400 , VIS.maxValueZ/4);
+                group.add(cylinder);
+            }
+
+        });
+
+        return group;
 
     }
 
