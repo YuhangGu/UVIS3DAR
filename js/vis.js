@@ -465,7 +465,7 @@ function initBaseMap() {
             .attr("opacity", 0.0)
             .attr("class", "basemap3Dpath")
             .attr("name", function(d) {
-                var name = d.properties.gemeentena;
+                var name = d.properties.Gemeentena;
                 var index = name.indexOf("|");
                 if (index != -1) {
                     name = name.substr(0, index);
@@ -474,12 +474,12 @@ function initBaseMap() {
             })
             .on("dblclick", function(d) {
 
-                if (d.properties.gemeentena === citySelectedCurr) {
+                if (d.properties.Gemeentena === citySelectedCurr) {
                     updateFlowMap('ALL');
                     citySelectedCurr = 'ALL';
                 } else {
-                    updateFlowMap(d.properties.gemeentena);
-                    citySelectedCurr = d.properties.gemeentena;
+                    updateFlowMap(d.properties.Gemeentena);
+                    citySelectedCurr = d.properties.Gemeentena;
                 }
 
             });
@@ -535,7 +535,7 @@ function initBaseMap() {
         });
 
         dataFlows.geo.features.forEach(function(d, i) {
-            var cityName = d.properties.gemeentena;
+            var cityName = d.properties.Gemeentena;
             VIS.ctx.fillStyle = "black";
             VIS.ctx.font = '40pt Arial';
             VIS.ctx.textAlign = "center";
