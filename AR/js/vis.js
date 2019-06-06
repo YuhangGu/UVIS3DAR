@@ -408,7 +408,7 @@ function getBaseMap() {
             .attr("opacity", 1.0)
             .attr("class", "basemap3Dpath")
             .attr("name", function(d) {
-                var name = d.properties.Gemeentena;
+                var name = d.properties.GM_NAAM;
                 var index = name.indexOf("|");
                 if (index != -1) {
                     name = name.substr(0, index);
@@ -450,7 +450,7 @@ function getBaseMap() {
 
 
        dataFlows.geo.features.forEach(function(d, i) {
-            var cityName = d.properties.Gemeentena;
+            var cityName = d.properties.GM_NAAM;
             VIS.ctx.fillStyle = "red";
             VIS.ctx.font = '40pt Arial';
             VIS.ctx.textAlign = "center";
