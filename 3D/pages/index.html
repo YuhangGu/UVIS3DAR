@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>3D Flow Map</title>
+    <!-- Mapbox -->
+    <script src='https://api.mapbox.com/mapbox-gl-js/v0.50.0/mapbox-gl.js'></script>
+    <link href='https://api.mapbox.com/mapbox-gl-js/v0.50.0/mapbox-gl.css' rel='stylesheet' />
+    <!-- D3 -->
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://d3js.org/d3-color.v1.min.js"></script>
+    <script src="https://d3js.org/d3-scale.v2.min.js"></script>
+    <script src="https://d3js.org/d3-array.v1.min.js"></script>
+    <script src="https://d3js.org/d3-geo.v1.min.js"></script>
+    <!-- Three.js -->
+    <script src="https://rawgit.com/mrdoob/three.js/master/build/three.min.js"></script>
+    <script src="https://rawgit.com/mrdoob/three.js/master/examples/js/controls/TrackballControls.js"></script>
+    <script src="https://rawgit.com/mrdoob/three.js/master/examples/js/renderers/CSS3DRenderer.js"></script>
+    <script src="https://rawgit.com/mrdoob/three.js/master/examples/js/renderers/SVGRenderer.js"></script>
+    <!-- jquery -->
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <!-- Tween -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tween.js/17.2.0/Tween.js"></script>
+    <!-- Custom CSS -->
+    <link href="../css/style.css" rel="stylesheet">
+</head>
+
+<body onload="visStart()">
+    <div id="map"></div>
+    <div id="dataset_panel">
+        <table class="table bg-info" id="datapanel">
+            <thead>
+                <tr>
+                    <td>Data set</td>
+                </tr>
+            </thead>
+            <tr>
+                <td>Utrecht</td>
+                <td><input type="radio" name="municipality"  value="Utrecht"></td>
+            </tr>
+            <tr>
+                <td>Friesland</td>
+                <td><input type="radio" name="municipality" value="Friesland"></td>
+            </tr>
+            <tr>
+                <td>Groningen</td>
+                <td><input type="radio" name="municipality" checked value="Groningen"></td>
+            </tr>
+        </table>
+    </div>
+    <div id="direction_panel">
+        <table class="table bg-info" id="datapanel">
+            <thead>
+                <tr>
+                    <td>Direction</td>
+                </tr>
+            </thead>
+            <tr>
+                <td>
+                    <svg width="20" height="15">
+                        <rect width="20" height="15" fill="#BE1F04" />
+                    </svg>
+                </td>
+                <td>Out</td>
+                <td><input type="radio" name="datacontrol" checked value="out"></td>
+            </tr>
+            <tr>
+                <td>
+                    <svg width="20" height="15">
+                        <rect width="20" height="15" fill="#1086C1" />
+                    </svg>
+                </td>
+                <td>In</td>
+                <td><input type="radio" name="datacontrol" value="in"></td>
+            </tr>
+            <!--tr>
+                <td>
+                    <svg width="10" height="15">
+                        <rect width="10" height="15" fill="#BE1F04" />
+                    </svg>
+                    <svg width="10" height="15">
+                        <rect width="10" height="15" fill="#1086C1" />
+                    </svg>
+                </td>
+                <td>O&I</td>
+                <td><input type="radio" name="datacontrol" value="all"></td>
+            </tr-->
+            <!--tr>
+            <td>res</td>
+            <td><input type="radio" name="datacontrol"   value="res"></td>
+        </tr-->
+        </table>
+    </div>
+    <div id="visvariables">
+        <table class="table bg-info" id="layerpanel">
+            <thead>
+                <tr>
+                    <td>Representation</td>
+                </tr>
+            </thead>
+            <tr>
+                <td>Rep: Height</td>
+                <td><input type="radio" name="layercontrol" checked value="height"></td>
+            </tr>
+            <!--tr>
+                <td>Flow Width</td>
+                <td><input type="radio" name="layercontrol"  value="width-3"></td>
+            </tr>
+            <tr>
+                <td>Flow Width (V2)</td>
+                <td><input type="radio" name="layercontrol"  value="width-2"></td>
+            </tr-->
+            <tr>
+                <td>Rep: Width</td>
+                <td><input type="radio" name="layercontrol"  value="width"></td>
+            </tr>
+        </table>
+    </div>
+    <!-- Custom Theme JavaScript -->
+    <!--script src="../lib/d3-threeD.js"></script-->
+    <script src="../libs/DragControls.js"></script>
+    <script src="../libs/TrackballControls.js"></script>
+    <script src="../js/data.js"></script>
+    <script src="../js/symbol.js"></script>
+    <script src="../js/vis.js"></script>
+    <script src="../js/main.js"></script>
+</body>
+
+</html>
