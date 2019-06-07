@@ -74,14 +74,11 @@ function creatLegends(representationCurr) {
 }
 
 
-function getMeshFromFlow(flow, choosen_index) {
+function getMeshFromFlow(flow, choosen_index, representation) {
 
 
-    var representation = $('input[name="layercontrol"]:checked').val();
+    //dataEncoded = $('input[name="datacontrol"]:checked').val();
 
-    dataEncoded = $('input[name="datacontrol"]:checked').val();
-
-    representation = "width";
     dataEncoded = "out";
 
 
@@ -113,7 +110,6 @@ function getMeshFromFlow(flow, choosen_index) {
                 return createSemiCircle(flow);
                 break;
                 */
-
     }
 }
 

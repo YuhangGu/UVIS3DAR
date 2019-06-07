@@ -9,6 +9,9 @@ var mesh1;
 
 var dataChordC;
 
+var cityChosen = ["Utrecht", "Bunnik"];
+var representationChosen = ["width", "height"];
+
 
 function visARstart() {
 
@@ -106,13 +109,12 @@ function initialize() {
 
     let patternArray = ["letterA", "letterB", "letterC", "letterD", "letterF", "kanji", "hiro"];
     let colorArray = [0xff0000, 0xff8800, 0xffff00, 0x00cc00, 0x0000ff, 0xcc00ff, 0xcccccc];
-    for (let i = 0; i < 7; i++) {
 
 
-        if (i == 6) {
 
-            let markerRoot = new THREE.Group();
+    for (let i = 0; i < 4; i++) {
 
+           let markerRoot = new THREE.Group();
 
             scene.add(markerRoot);
 
@@ -123,46 +125,17 @@ function initialize() {
 
             var baseMap = getBaseMap();
 
-            //baseMap.rotation.set(new THREE.Vector3( 0,  Math.PI/2,  0))
-            //baseMap.position.set(0,0.5,0)
-
-            //baseMap.rotation.set(new THREE.Vector3( 0,  0,  0))
-
             baseMap.rotation.set(-Math.PI/2,0, 0)
 
             markerRoot.add(baseMap);
 
+            console.log(cityChosen[parseInt(i/2)], representationChosen[parseInt(i%2)])
 
-            var flows = getFlows();
+            var flows = getFlows(cityChosen[parseInt(i/2)], representationChosen[parseInt(i%2)]);
 
             flows.rotation.set(-Math.PI/2,0, 0);
 
             markerRoot.add(flows);
-
-
-
-
-        }else {
-
-            let markerRoot = new THREE.Group();
-            scene.add(markerRoot);
-
-            let markerControls = new THREEx.ArMarkerControls(arToolkitContext, markerRoot, {
-                type: 'pattern',
-                patternUrl: "data/" + patternArray[i] + ".patt",
-            });
-
-            let mesh = new THREE.Mesh(
-                new THREE.CubeGeometry(1.25, 1.25, 1.25),
-                new THREE.MeshBasicMaterial({color: colorArray[i], map: texture, transparent: true, opacity: 0.5})
-            );
-
-
-            mesh.position.y = 1.25 / 2;
-            markerRoot.add(mesh);
-
-
-        }
 
 
     }

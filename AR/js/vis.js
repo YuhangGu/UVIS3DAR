@@ -34,9 +34,9 @@ var VIS = {
     windowdiv_height: $(document.body).height(),
 
     //map plane in scene
-    map_length: 2.4,
-    map_width: 1.8,
-    map_height: 1.8,
+    map_length: 2.8,
+    map_width: 2.4,
+    map_height: 2.4,
 
     //UI
     //groupMapCityUI: null,
@@ -48,7 +48,7 @@ var VIS = {
     PositionsOD: d3.map(),
 
     //scaleUtrecht: 300000,
-    scaleUtrecht: 400,
+    scaleUtrecht: 300,
     centerUtrecht: [5.172803315737347, 52.095790056996094],
 
     scaleFriesland: 210000,
@@ -368,17 +368,18 @@ function prepareVis(callback) {
 function getBaseMap() {
 
     var devicePixelRatio = 1;
-    VIS.canvas = document.createElement("CANVAS");
-    VIS.canvas.width = VIS.map_length*1000 ;
-    VIS.canvas.height = VIS.map_width*1000 ;
-    VIS.ctx = VIS.canvas.getContext('2d');
-    VIS.ctx.scale(devicePixelRatio, devicePixelRatio);
-    VIS.texture = new THREE.Texture(VIS.canvas);
-    VIS.texture.needsUpdate = true;
+    var canvas = document.createElement("CANVAS");
+    canvas.width = VIS.map_length*1000 ;
+    canvas.height = VIS.map_width*1000 ;
+    var ctx = canvas.getContext('2d');
+
+    ctx.scale(devicePixelRatio, devicePixelRatio);
+    var texture = new THREE.Texture(canvas);
+    texture.needsUpdate = true;
 
 
     var canvas_material = new THREE.MeshBasicMaterial({
-        map: VIS.texture,
+        map: texture,
         side: THREE.DoubleSide,
         //opacity: 0.9
     });
@@ -391,7 +392,7 @@ function getBaseMap() {
 
     initPathOnMap(initTextureMap);
 
-    VIS.texture.needsUpdate = true;
+    texture.needsUpdate = true;
 
     return mesh;
 
@@ -432,50 +433,50 @@ function getBaseMap() {
 
     function initTextureMap() {
 
-        //console.log(VIS.ctx);
+        //console.log(ctx);
 
-        var path = d3.geoPath().projection(VIS.projectionBase).context(VIS.ctx);
+        var path = d3.geoPath().projection(VIS.projectionBase).context(ctx);
         dataFlows.geo.features.forEach(function(d) {
 
-            VIS.ctx.fillStyle = "#ddeedd";
+            ctx.fillStyle = "#ddeedd";
 
-            VIS.ctx.strokeStyle = 'orange';
-            VIS.ctx.lineWidth = 5;
-            VIS.ctx.beginPath();
+            ctx.strokeStyle = 'orange';
+            ctx.lineWidth = 5;
+            ctx.beginPath();
             path(d);
 
-            VIS.ctx.fill();
-            VIS.ctx.stroke();
+            ctx.fill();
+            ctx.stroke();
         });
 
 
        dataFlows.geo.features.forEach(function(d, i) {
             var cityName = d.properties.GM_NAAM;
-            VIS.ctx.fillStyle = "red";
-            VIS.ctx.font = '40pt Arial';
-            VIS.ctx.textAlign = "center";
-            VIS.ctx.textBaseline = "middle";
-            VIS.ctx.fillText(i + 1,
+            ctx.fillStyle = "red";
+            ctx.font = '40pt Arial';
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.fillText(i + 1,
                     VIS.centerOnTexture[cityName][0]*1000 - 35,
                     VIS.centerOnTexture[cityName][1]*1000 + 35);
 
         });
 
-        VIS.texture.needsUpdate = true;
+        texture.needsUpdate = true;
     }
 
 }
 
-function getFlows() {
+function getFlows(cityChosen, representation) {
 
     var flowsGroup = new THREE.Group();
 
     dataChord.forEach(function(flow) {
 
-        var choosen_index = dataFlows.city.indexOf("Utrecht")
+        var choosen_index = dataFlows.city.indexOf(cityChosen);
 
         if (flow.source.index === choosen_index || flow.target.index === choosen_index) {
-            var flow = getMeshFromFlow(flow, choosen_index);
+            var flow = getMeshFromFlow(flow, choosen_index, representation);
             if (flow) {
                 flowsGroup.add(flow);
             }
@@ -487,93 +488,3 @@ function getFlows() {
 }
 
 
-function updateFlowMap(selectedCity) {
-
-
-    updateLegend($('input[name="layercontrol"]:checked').val());
-
-    if (selectedCity === "ALL") {
-        draw3DFlows(SHOW_ALL_FLOWS);
-    } else {
-        draw3DFlows(dataFlows.city.indexOf(selectedCity));
-    }
-
-    function draw3DFlows(choosen_index) {
-
-        clearScene();
-
-        dataChord.forEach(function(flow, flow_index) {
-
-            if (choosen_index === SHOW_ALL_FLOWS) {
-                var flow = getMeshFromFlow(flow, choosen_index, flow_index);
-                if (flow) {
-                    flowsSet.push(flow);
-                    VIS.glScene.add(flow);
-                }
-
-            } else if (flow.source.index === choosen_index || flow.target.index === choosen_index) {
-                var flow = getMeshFromFlow(flow, choosen_index, flow_index);
-                if (flow) {
-                    flowsSet.push(flow);
-                    VIS.glScene.add(flow);
-                }
-            }
-
-        });
-
-        update_old();
-
-    }
-
-    function clearScene() {
-        flowsSet.forEach(function(d) {
-            if (d.type === "Group") {
-
-                d.children.forEach(function(t) {
-                    t.material.dispose();
-                    t.geometry.dispose();
-                });
-                for (let i = d.children.length - 1; i >= 0; i--) {
-                    d.remove(d.children[i]);
-                }
-            }
-            VIS.glScene.remove(d);
-        });
-    }
-
-
-    function updateLegend(representationCurr) {
-
-        legendSet.forEach(function(d) {
-            if (d.type === "Group") {
-
-                d.children.forEach(function(t) {
-                    t.material.dispose();
-                    t.geometry.dispose();
-                });
-                for (let i = d.children.length - 1; i >= 0; i--) {
-                    d.remove(d.children[i]);
-                }
-            }
-            VIS.glScene.remove(d);
-        });
-
-
-        var legend = creatLegends(representationCurr);
-        legendSet.push(legend);
-        VIS.glScene.add(legend);
-    }
-
-}
-
-
-function update_old() {
-
-    TWEEN.update();
-
-    VIS.controls.update();
-    VIS.glRenderer.render(VIS.glScene, VIS.camera);
-    VIS.cssRenderer.render(VIS.cssScene, VIS.camera);
-
-    requestAnimationFrame(update);
-}

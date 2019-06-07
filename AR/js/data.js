@@ -24,6 +24,9 @@ const DIGIT_0 = 48,
     MINUS = 45;
 
 
+    
+
+
 function loadData(callback){
 
     //var DATA_PATH = "../data/mData-" + $('input[name="municipality"]:checked').val() + ".json";
