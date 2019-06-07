@@ -103,7 +103,12 @@ var VIS = {
 
     angle2heightZ: 1,
     color: null,
+    classes: {
 
+        "Utrecht" :[41, 121, 318],
+        "Leeuwarden" :  [27, 89, 205],
+        "Groningen": [25, 74, 187]
+    }, 
 
 }
 
@@ -125,8 +130,8 @@ function initialize(callback) {
     VIS.color = createColorScale();
 
 
-    VIS.scaleHeight = createScaleQuantizeHeight();
-    VIS.scaleWidth = createScaleQuantizeWidth();
+    VIS.scaleHeight = createScaleQuantizeHeight(citySelectedCurr);
+    VIS.scaleWidth = createScaleQuantizeWidth(citySelectedCurr);
 
     VIS.groupMapCityUI = createGroupforUI();
 
@@ -294,33 +299,9 @@ function initialize(callback) {
     }
 
 
+    function createScaleQuantizeHeight(citySelectedCurr) {
 
-    function createScaleLinerWidth() {
-
-        var max_overall = [];
-        dataFlows.matrix.forEach(function(d, i) {
-            if (i != 0) {
-                max_overall.push(d3.max(d));
-            }
-        });
-
-        VIS.maxFlowValue = d3.max(max_overall);
-
-        return d3.scaleLinear().domain([0, VIS.maxFlowValue]).range([0, VIS.maxValueWidth]);
-
-    }
-
-    function createScaleGlMapZ() {
-
-        var cityValue = dataChord.groups.map(function(d) {
-            return d.value;
-        });
-
-        return d3.scaleLinear().domain([0, d3.max(cityValue)]).range([0, VIS.maxGLMapZ]);
-    }
-
-
-    function createScaleQuantizeHeight() {
+        var obj = "VIS.classes." + citySelectedCurr;
 
         var array = [].concat(...dataFlows.matrix).filter(d => d != 0);
 
@@ -334,7 +315,12 @@ function initialize(callback) {
         var mean_right = d3.mean(arr_right);
 
         //console.log(sub.arr, arr_left, arr_right)
-        var classes = [1, mean_left, mean, mean_right];
+        //var classes = [1, mean_left, mean, mean_right];
+
+        var classes = [1];
+        classes = classes.concat( eval(obj));
+
+        console.log( citySelectedCurr,  eval(obj), classes);
 
         var rangeSpace = [0, 0.25, 0.5, 0.75, 1];
         rangeSpace = rangeSpace.map(d => d * VIS.maxValueZ)
@@ -345,8 +331,9 @@ function initialize(callback) {
         return scaleThreshold;
     }
 
-    function createScaleQuantizeWidth() {
-
+    function createScaleQuantizeWidth(citySelectedCurr) {
+        var obj = "VIS.classes." +citySelectedCurr;
+        
         var array = [].concat(...dataFlows.matrix).filter(d => d != 0);
 
         array = array.sort((a, b) => { return a - b; });
@@ -359,7 +346,10 @@ function initialize(callback) {
         var mean_right = d3.mean(arr_right);
 
         //console.log(sub.arr, arr_left, arr_right)
-        var classes = [1, mean_left, mean, mean_right];
+        //var classes = [1, mean_left, mean, mean_right];
+
+        var classes = [1];
+        classes = classes.concat( eval(obj));
 
         var rangeSpace = [0, 0.2, 0.5, 0.8, 1];
         rangeSpace = rangeSpace.map(d => d * VIS.maxValueWidth)
