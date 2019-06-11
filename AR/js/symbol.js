@@ -74,16 +74,10 @@ function creatLegends(representationCurr) {
 }
 
 
-function getMeshFromFlow(flow, choosen_index, representation) {
-
-
-    //dataEncoded = $('input[name="datacontrol"]:checked').val();
-
-    dataEncoded = "out";
+function getMeshFromFlow(flow, choosen_index, representation, dataEncoded) {
 
 
     switch (representation) {
-
 
         case 'height':
             return createTubes3DHeight(flow, dataEncoded, choosen_index);
@@ -92,24 +86,6 @@ function getMeshFromFlow(flow, choosen_index, representation) {
         case 'width':
             return createTubesWidth(flow, dataEncoded, choosen_index);
             break;
-
-            /*
-            case 'width-2':
-                return createRibbons(flow, dataEncoded, choosen_index);
-                break;
-
-            case 'width-3':
-                return createSemiCircleTubes(flow, dataEncoded, choosen_index);
-                break;
-
-            case '3Dheight':
-                return createTubes3DHeight(flow);
-                break;
-
-            case 'line':
-                return createSemiCircle(flow);
-                break;
-                */
     }
 }
 

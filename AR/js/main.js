@@ -2,22 +2,41 @@ var scene, camera, renderer, clock, deltaTime, totalTime;
 
 var arToolkitSource, arToolkitContext;
 
-var markerRoot1, markerRoot2;
 
-var mesh1;
+var dataSourceName;
+
+const conf = {
+
+    'Utrecht': [
+        ['Utrecht', 'height', 'out', 'A', 'map-training'],
+        ['Utrechtse Heuvelrug', 'height', 'out', 'B', 'map-training'],
+        ['Amersfoort', 'width', 'in', 'C', 'map-training'],
+        ['Zeist', 'width', 'in', 'D', 'map-training']
+    ],
+    'Friesland': [
+        ['Leeuwarden', 'height', 'out', 'A', 'map-1'],
+        ['Súdwest-Fryslân', 'height', 'in', 'B', 'map-2'],
+        ['Tytsjerksteradiel', 'width', 'out', 'C', 'map-3'],
+        ['Heerenveen', 'width', 'in', 'D', 'map-4']
+    ],
+    'Groningen': [
+        ['Groningen', 'height', 'out', 'A', 'map-5'],
+        ['Loppersum', 'height', 'in', 'B', 'map-6'],
+        ['Oldambt', 'width', 'out', 'C', 'map-7'],
+        ['Zuidhorn', 'width', 'out', 'D', 'map-8']
+    ]
+}
 
 
-var dataChordC;
+function visARstart(dataPathName) {
 
-var cityChosen = ["Utrecht", "Bunnik"];
-var representationChosen = ["width", "height"];
-
-
-function visARstart() {
+    dataSourceName = dataPathName;
 
     initTHREEComponets();
-    loadData(function () {
-        prepareVis(function () {
+
+    loadData(dataPathName, function() {
+
+        prepareVis(function() {
             initialize();
             animate();
         });
@@ -27,6 +46,7 @@ function visARstart() {
 }
 
 function initTHREEComponets() {
+
     scene = new THREE.Scene();
 
     let ambientLight = new THREE.AmbientLight("#f0f0f0", 0.5);
@@ -50,11 +70,6 @@ function initTHREEComponets() {
     renderer.domElement.style.top = '0px';
     renderer.domElement.style.left = '0px';
     document.body.appendChild(renderer.domElement);
-
-}
-
-function initialize() {
-
 
     clock = new THREE.Clock();
     deltaTime = 0;
@@ -81,7 +96,7 @@ function initialize() {
     });
 
     // handle resize event
-    window.addEventListener('resize', function () {
+    window.addEventListener('resize', function() {
         onResize()
     });
 
@@ -100,46 +115,49 @@ function initialize() {
         camera.projectionMatrix.copy(arToolkitContext.getProjectionMatrix());
     });
 
+}
+
+function initialize() {
+
+
     ////////////////////////////////////////////////////////////
     // setup markerRoots
     ////////////////////////////////////////////////////////////
 
-    let loader = new THREE.TextureLoader();
-    let texture = loader.load('images/border.png');
+    let patternArray = ["letterA", "letterB", "letterC", "letterD"];
+    //let colorArray = [0xff0000, 0xff8800, 0xffff00, 0x00cc00, 0x0000ff, 0xcc00ff, 0xcccccc];
 
-    let patternArray = ["letterA", "letterB", "letterC", "letterD", "letterF", "kanji", "hiro"];
-    let colorArray = [0xff0000, 0xff8800, 0xffff00, 0x00cc00, 0x0000ff, 0xcc00ff, 0xcccccc];
-
+    var confString = "conf." + dataSourceName;
 
 
     for (let i = 0; i < 4; i++) {
 
-           let markerRoot = new THREE.Group();
+        let markerRoot = new THREE.Group();
 
-            scene.add(markerRoot);
+        scene.add(markerRoot);
 
-            let markerControls = new THREEx.ArMarkerControls(arToolkitContext, markerRoot, {
-                type: 'pattern',
-                patternUrl: "data/" + patternArray[i] + ".patt",
-            });
+        let markerControls = new THREEx.ArMarkerControls(arToolkitContext, markerRoot, {
+            type: 'pattern',
+            patternUrl: "data/" + patternArray[i] + ".patt",
+        });
 
-            var baseMap = getBaseMap();
+        var baseMap = getBaseMap();
 
-            baseMap.rotation.set(-Math.PI/2,0, 0)
+        baseMap.rotation.set(-Math.PI / 2, 0, 0)
 
-            markerRoot.add(baseMap);
+        markerRoot.add(baseMap);
 
-            console.log(cityChosen[parseInt(i/2)], representationChosen[parseInt(i%2)])
+        //var flows = getFlows(cityChosen[parseInt(i / 2)], representationChosen[parseInt(i % 2)]);
 
-            var flows = getFlows(cityChosen[parseInt(i/2)], representationChosen[parseInt(i%2)]);
+        //console.log(eval(confString)[i])
 
-            flows.rotation.set(-Math.PI/2,0, 0);
+        var flows = getFlows(eval(confString)[i]);
 
-            markerRoot.add(flows);
+        flows.rotation.set(-Math.PI / 2, 0, 0);
 
+        markerRoot.add(flows);
 
     }
-
 
 }
 

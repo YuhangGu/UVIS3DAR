@@ -1,109 +1,39 @@
 /**
- * Created by Aero on 23/11/2018.
+ * Created by Aero on 23/5/2019.
  */
 
-var INTERSECTED;
-var citySelectedCurr = "ALL";
-
-var representationCurr = $('input[name="layercontrol"]:checked').val();
-
-
-if ($('input[name="municipality"]:checked').val() == "Utrecht") {
-    citySelectedCurr = "Utrecht";
-}
-if ($('input[name="municipality"]:checked').val() == "Friesland") {
-
-    citySelectedCurr = "Leeuwarden";
-}
-if ($('input[name="municipality"]:checked').val() == "Groningen") {
-
-    citySelectedCurr = "Groningen";
-}
-
-var dataEncoded = $('input[name="datacontrol"]:checked').val();
-
-
-// all the city gl objects
-var glMapObjectsArr = [];
-
-var glMapZs = null;
-var glMapPositions = null;
 var VIS = {
-    //DOM features
-    windowdiv_width: $(document.body).width(),
-    windowdiv_height: $(document.body).height(),
-
     //map plane in scene
     map_length: 2.8,
     map_width: 2.4,
     map_height: 2.4,
 
-    //UI
-    //groupMapCityUI: null,
-
-    //projectionScale : 230000,
-
     projection: null,
     centerOnTexture: d3.map(),
     PositionsOD: d3.map(),
 
-    //scaleUtrecht: 300000,
     scaleUtrecht: 300,
     centerUtrecht: [5.172803315737347, 52.095790056996094],
 
-    scaleFriesland: 210000,
-    //centerFriesland: [5.866845438150408, 53.097469997029293],
+    scaleFriesland: 210,
     centerFriesland: [5.7, 53.15],
 
-    scaleGroningen: 280000,
+    scaleGroningen: 210,
     centerGroningen: [6.676474921549358, 53.251419501963163],
-
-    //THREE Components
-    camera: null,
-    glScene: null,
-    cssScene: null,
-    glRenderer: null,
-    cssRenderer: null,
-    controls: null,
-    dragControls: null,
-
-    raycaster: null,
-    mouse: null,
-
-
-    // 3D graphic
-    unitline3D: 120,
 
     ctx: null,
     texture: null,
-
-    label_ctx: null,
-    labeltexture: null,
-
-
-    //max in dataset
-    maxAngle: 0,
-
-    maxTotalFlowValue: 0,
-    maxSingleFlowValue: 0,
-    //scale & color
-    linerScaleWidth: null,
-    linerScaleValue2Z: null,
-    linerScaleAngle2Z: null,
-    linerScaleAngle2ZDouble: null,
-
-    scaleHeight: null,
-
-    linerScaleGlMapZ: null,
-    //maxGLMapZ: 100,
 
     //max for graphic
     maxValueWidth: 0.01,
     maxValueZ: 1.8,
 
-    angle2heightZ: 1,
-    color: null,
 
+    classes: {
+        "Utrecht" :[41, 121, 318],
+        "Leeuwarden" :  [27, 89, 205],
+        "Groningen": [25, 74, 187]
+    }, 
 
 }
 
@@ -113,39 +43,26 @@ function prepareVis(callback) {
 
     VIS.projectionBase = createProjectionBase();
 
-    VIS.color = createColorScale();
-
 
     VIS.scaleHeight = createScaleQuantizeHeight();
     VIS.scaleWidth = createScaleQuantizeWidth();
 
     VIS.groupMapCityUI = createGroupforUI();
 
-    $('input[name="layercontrol"]').change(function(e) {
-        updateFlowMap(citySelectedCurr);
-    });
-
-    $('input[name="datacontrol"]').change(function(e) {
-        updateFlowMap(citySelectedCurr);
-    });
-
-
     function createProjection() {
 
         var center = null;
         var scale;
 
-        var cityChoosen = "Utrecht";
-
-        if (cityChoosen == "Utrecht") {
+        if (citySelectedCurr == "Utrecht") {
             center = VIS.centerUtrecht;
             scale = VIS.scaleUtrecht;
         }
-        if (cityChoosen == "Friesland") {
+        if (citySelectedCurr == "Friesland") {
             center = VIS.centerFriesland;
             scale = VIS.scaleFriesland;
         }
-        if (cityChoosen == "Groningen") {
+        if (citySelectedCurr == "Groningen") {
             center = VIS.centerGroningen;
             scale = VIS.scaleGroningen;
         }
@@ -168,17 +85,17 @@ function prepareVis(callback) {
         var center = null;
         var scale;
 
-        var cityChoosen = "Utrecht";
+    
 
-        if (cityChoosen == "Utrecht") {
+        if (citySelectedCurr == "Utrecht") {
             center = VIS.centerUtrecht;
             scale = VIS.scaleUtrecht;
         }
-        if (cityChoosen == "Friesland") {
+        if (citySelectedCurr == "Friesland") {
             center = VIS.centerFriesland;
             scale = VIS.scaleFriesland;
         }
-        if (cityChoosen == "Groningen") {
+        if (citySelectedCurr == "Groningen") {
             center = VIS.centerGroningen;
             scale = VIS.scaleGroningen;
         }
@@ -313,6 +230,8 @@ function prepareVis(callback) {
 
     function createScaleQuantizeHeight() {
 
+        var obj = "VIS.classes." + citySelectedCurr;
+
         var array = [].concat(...dataFlows.matrix).filter(d => d != 0);
 
         array = array.sort((a, b) => { return a - b; });
@@ -325,7 +244,12 @@ function prepareVis(callback) {
         var mean_right = d3.mean(arr_right);
 
         //console.log(sub.arr, arr_left, arr_right)
-        var classes = [1, mean_left, mean, mean_right];
+        //var classes = [1, mean_left, mean, mean_right];
+
+        var classes = [1];
+        classes = classes.concat( eval(obj));
+
+        console.log( citySelectedCurr,  eval(obj), classes);
 
         var rangeSpace = [0, 0.25, 0.5, 0.75, 1];
         rangeSpace = rangeSpace.map(d => d * VIS.maxValueZ)
@@ -338,6 +262,8 @@ function prepareVis(callback) {
 
     function createScaleQuantizeWidth() {
 
+        var obj = "VIS.classes." +citySelectedCurr;
+        
         var array = [].concat(...dataFlows.matrix).filter(d => d != 0);
 
         array = array.sort((a, b) => { return a - b; });
@@ -350,7 +276,10 @@ function prepareVis(callback) {
         var mean_right = d3.mean(arr_right);
 
         //console.log(sub.arr, arr_left, arr_right)
-        var classes = [1, mean_left, mean, mean_right];
+        //var classes = [1, mean_left, mean, mean_right];
+
+        var classes = [1];
+        classes = classes.concat( eval(obj));
 
         var rangeSpace = [0, 0.2, 0.5, 0.8, 1];
         rangeSpace = rangeSpace.map(d => d * VIS.maxValueWidth)
@@ -467,16 +396,21 @@ function getBaseMap() {
 
 }
 
-function getFlows(cityChosen, representation) {
+function getFlows( conf ) {
+//     ['Utrecht', 'height', 'Out', 'A', 'map-training'],
+
 
     var flowsGroup = new THREE.Group();
 
     dataChord.forEach(function(flow) {
 
-        var choosen_index = dataFlows.city.indexOf(cityChosen);
+        var choosen_index = dataFlows.city.indexOf(conf[0]);
 
         if (flow.source.index === choosen_index || flow.target.index === choosen_index) {
-            var flow = getMeshFromFlow(flow, choosen_index, representation);
+            var flow = getMeshFromFlow(flow, 
+                    choosen_index /*conf[0]*/, conf[1],  conf[2]);
+
+
             if (flow) {
                 flowsGroup.add(flow);
             }
