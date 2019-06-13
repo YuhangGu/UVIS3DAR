@@ -5,6 +5,8 @@
 var dataFlows;
 var dataChord;
 
+var mapName;
+
 
 var citySelectedCurr ;
 
@@ -14,11 +16,11 @@ var citySelectedCurr ;
 //const SHOW_ALL_FLOWS = -5;
 //var font = null;
 
-function loadData(dataPathName, callback){
+function loadData(callback){
 
-    var dataPath = "./data/mData-" + dataPathName + ".json";
+    var dataPath = "./data/mData-" + mapName + ".json";
 
-    citySelectedCurr =  dataPathName;
+    citySelectedCurr =  mapName;
 
     d3.json( dataPath)
         .then(function(data){

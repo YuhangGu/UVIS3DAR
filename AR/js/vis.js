@@ -31,7 +31,7 @@ var VIS = {
 
     classes: {
         "Utrecht" :[41, 121, 318],
-        "Leeuwarden" :  [27, 89, 205],
+        "Friesland" :  [27, 89, 205],
         "Groningen": [25, 74, 187]
     }, 
 
@@ -249,7 +249,7 @@ function prepareVis(callback) {
         var classes = [1];
         classes = classes.concat( eval(obj));
 
-        console.log( citySelectedCurr,  eval(obj), classes);
+        //console.log( citySelectedCurr,  eval(obj), classes);
 
         var rangeSpace = [0, 0.25, 0.5, 0.75, 1];
         rangeSpace = rangeSpace.map(d => d * VIS.maxValueZ)
@@ -295,6 +295,8 @@ function prepareVis(callback) {
 
 
 function getBaseMap() {
+
+    //console.log(citySelectedCurr);
 
     var devicePixelRatio = 1;
     var canvas = document.createElement("CANVAS");
@@ -408,7 +410,7 @@ function getFlows( conf ) {
 
         if (flow.source.index === choosen_index || flow.target.index === choosen_index) {
             var flow = getMeshFromFlow(flow, 
-                    choosen_index /*conf[0]*/, conf[1],  conf[2]);
+                    choosen_index /*conf[0]*/, conf[2],  conf[3]);
 
 
             if (flow) {

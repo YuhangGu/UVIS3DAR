@@ -3,38 +3,32 @@ var scene, camera, renderer, clock, deltaTime, totalTime;
 var arToolkitSource, arToolkitContext;
 
 
-var dataSourceName;
-
-const conf = {
-
-    'Utrecht': [
-        ['Utrecht', 'height', 'out', 'A', 'map-training'],
-        ['Utrechtse Heuvelrug', 'height', 'out', 'B', 'map-training'],
-        ['Amersfoort', 'width', 'in', 'C', 'map-training'],
-        ['Zeist', 'width', 'in', 'D', 'map-training']
-    ],
-    'Friesland': [
-        ['Leeuwarden', 'height', 'out', 'A', 'map-1'],
-        ['Súdwest-Fryslân', 'height', 'in', 'B', 'map-2'],
-        ['Tytsjerksteradiel', 'width', 'out', 'C', 'map-3'],
-        ['Heerenveen', 'width', 'in', 'D', 'map-4']
-    ],
-    'Groningen': [
-        ['Groningen', 'height', 'out', 'A', 'map-5'],
-        ['Loppersum', 'height', 'in', 'B', 'map-6'],
-        ['Oldambt', 'width', 'out', 'C', 'map-7'],
-        ['Zuidhorn', 'width', 'out', 'D', 'map-8']
-    ]
-}
+var mapCodeSub;
 
 
-function visARstart(dataPathName) {
+function visARstart(mapCode) {
 
-    dataSourceName = dataPathName;
+    mapCodeSub = mapCode;
+
+
+    switch (mapCode) {
+
+        case 'TU':
+            mapName = 'Utrecht';
+            break;
+        case 'AF':
+        case 'BF':
+            mapName = 'Friesland';
+            break;
+        case 'AG':
+        case 'BG':
+            mapName = 'Groningen';
+            break;
+    }
 
     initTHREEComponets();
 
-    loadData(dataPathName, function() {
+    loadData(function() {
 
         prepareVis(function() {
             initialize();
@@ -127,10 +121,15 @@ function initialize() {
     let patternArray = ["letterA", "letterB", "letterC", "letterD"];
     //let colorArray = [0xff0000, 0xff8800, 0xffff00, 0x00cc00, 0x0000ff, 0xcc00ff, 0xcccccc];
 
-    var confString = "conf." + dataSourceName;
+    
 
 
     for (let i = 0; i < 4; i++) {
+
+
+        var n = i+1;
+
+        var confString = "CONF." + mapCodeSub + n
 
         let markerRoot = new THREE.Group();
 
@@ -151,7 +150,7 @@ function initialize() {
 
         //console.log(eval(confString)[i])
 
-        var flows = getFlows(eval(confString)[i]);
+        var flows = getFlows(eval(confString));
 
         flows.rotation.set(-Math.PI / 2, 0, 0);
 
