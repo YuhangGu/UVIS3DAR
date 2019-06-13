@@ -4,10 +4,21 @@
 
 
 
-function creatLegends(representationCurr) {
+function creatLegends(conf) {
+
+    var color;
+
+    switch (conf[3]) {
+        case 'out':
+            color = "#CC3300";
+            break;
+        case 'in':
+            color = "#0099CC";
+            break;
+    }
 
 
-    switch (representationCurr) {
+    switch (conf[2]) {
 
         case 'height':
             return createLegendHeight();
@@ -22,46 +33,38 @@ function creatLegends(representationCurr) {
 
         var group = new THREE.Group();
 
-        console.log(VIS.scaleHeight.range());
-
-
-        // var height = VIS.scaleHeight(item.value);
-
         VIS.scaleHeight.range().forEach(function(d, i) {
 
             if (i != 0) {
 
-                var geometry = new THREE.CylinderGeometry(VIS.maxValueWidth/2, VIS.maxValueWidth/2, d, 32);
-                var material = new THREE.MeshLambertMaterial({ color: 0XCC6600 });
+                var heightTemp = d * 0.9
+
+                var geometry = new THREE.CylinderGeometry(VIS.maxValueWidth/2, VIS.maxValueWidth/2, heightTemp, 32);
+                var material = new THREE.MeshLambertMaterial({ color: color });
                 var cylinder = new THREE.Mesh(geometry, material);
                 cylinder.rotateX(Math.PI/2);
-                cylinder.position.set( VIS.map_length/2 - 100 * i , VIS.map_width/2 -400 , d/2);
+                cylinder.position.set( VIS.map_length/2 - 0.1 * i , VIS.map_width/2 - 0.3 , heightTemp/2);
                 group.add(cylinder);
             }
 
         });
 
-
         return group;
-
     }
 
     function createLegendWidth() {
 
         var group = new THREE.Group();
 
-
-        console.log(VIS.scaleWidth.range());
-
         VIS.scaleWidth.range().forEach(function(d, i) {
 
             if (i != 0) {
-
-                var geometry = new THREE.CylinderGeometry(d, d, VIS.maxValueZ/2, 32);
-                var material = new THREE.MeshLambertMaterial({ color: 0XCC6600 });
+                var heightTemp = VIS.maxValueZ / 2 *0.9;
+                var geometry = new THREE.CylinderGeometry(d, d,heightTemp, 32);
+                var material = new THREE.MeshLambertMaterial({ color: color });
                 var cylinder = new THREE.Mesh(geometry, material);
                 cylinder.rotateX(Math.PI/2);
-                cylinder.position.set( VIS.map_length/2 - 100 * i , VIS.map_width/2 -400 , VIS.maxValueZ/4);
+                cylinder.position.set( VIS.map_length/2 - 0.1 * i , VIS.map_width/2 -0.3 , heightTemp/2);
                 group.add(cylinder);
             }
 

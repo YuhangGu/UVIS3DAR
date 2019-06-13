@@ -121,11 +121,7 @@ function initialize() {
     let patternArray = ["letterA", "letterB", "letterC", "letterD"];
     //let colorArray = [0xff0000, 0xff8800, 0xffff00, 0x00cc00, 0x0000ff, 0xcc00ff, 0xcccccc];
 
-    
-
-
     for (let i = 0; i < 4; i++) {
-
 
         var n = i+1;
 
@@ -155,6 +151,11 @@ function initialize() {
         flows.rotation.set(-Math.PI / 2, 0, 0);
 
         markerRoot.add(flows);
+
+        var legend = creatLegends(eval(confString));
+
+        legend.rotation.set(-Math.PI / 2, 0, 0);
+        markerRoot.add(legend);
 
     }
 

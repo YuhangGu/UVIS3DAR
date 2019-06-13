@@ -25,7 +25,7 @@ var VIS = {
     texture: null,
 
     //max for graphic
-    maxValueWidth: 0.01,
+    maxValueWidth: 0.03,
     maxValueZ: 1.8,
 
 
@@ -33,7 +33,7 @@ var VIS = {
         "Utrecht" :[41, 121, 318],
         "Friesland" :  [27, 89, 205],
         "Groningen": [25, 74, 187]
-    }, 
+    },
 
 }
 
@@ -85,7 +85,7 @@ function prepareVis(callback) {
         var center = null;
         var scale;
 
-    
+
 
         if (citySelectedCurr == "Utrecht") {
             center = VIS.centerUtrecht;
@@ -263,7 +263,7 @@ function prepareVis(callback) {
     function createScaleQuantizeWidth() {
 
         var obj = "VIS.classes." +citySelectedCurr;
-        
+
         var array = [].concat(...dataFlows.matrix).filter(d => d != 0);
 
         array = array.sort((a, b) => { return a - b; });
@@ -371,8 +371,8 @@ function getBaseMap() {
 
             ctx.fillStyle = "#ddeedd";
 
-            ctx.strokeStyle = 'orange';
-            ctx.lineWidth = 5;
+            ctx.strokeStyle = '#192223';
+            ctx.lineWidth = 3;
             ctx.beginPath();
             path(d);
 
@@ -383,7 +383,7 @@ function getBaseMap() {
 
        dataFlows.geo.features.forEach(function(d, i) {
             var cityName = d.properties.GM_NAAM;
-            ctx.fillStyle = "red";
+            ctx.fillStyle = "#000000";
             ctx.font = '40pt Arial';
             ctx.textAlign = "center";
             ctx.textBaseline = "middle";
@@ -391,7 +391,27 @@ function getBaseMap() {
                     VIS.centerOnTexture[cityName][0]*1000 - 35,
                     VIS.centerOnTexture[cityName][1]*1000 + 35);
 
+            //console.log(VIS.centerOnTexture[cityName][0]*1000 - 35,VIS.centerOnTexture[cityName][1]*1000 + 35)
+
         });
+
+       for(var i=0; i<5;i++){
+
+           if(i==0){
+               ctx.fillStyle = "#000000";
+               ctx.font = '50pt Arial';
+               ctx.textAlign = "center";
+               ctx.textBaseline = "middle";
+               ctx.fillText( 'legend class',  VIS.map_length*1000-700 , 300 );
+           }
+           else{
+               ctx.fillStyle = "#000000";
+               ctx.font = '50pt Arial';
+               ctx.textAlign = "center";
+               ctx.textBaseline = "middle";
+               ctx.fillText( i,  VIS.map_length*1000- 100*i , 400 );
+           }
+       }
 
         texture.needsUpdate = true;
     }
@@ -409,7 +429,7 @@ function getFlows( conf ) {
         var choosen_index = dataFlows.city.indexOf(conf[0]);
 
         if (flow.source.index === choosen_index || flow.target.index === choosen_index) {
-            var flow = getMeshFromFlow(flow, 
+            var flow = getMeshFromFlow(flow,
                     choosen_index /*conf[0]*/, conf[2],  conf[3]);
 
 

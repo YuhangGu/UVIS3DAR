@@ -459,20 +459,7 @@ function initBaseMap() {
                 return name;
             })
             .on("dblclick", function(d) {
-
-                console.log(d.properties.GM_NAAM)
-
-
-                /*
-                if (d.properties.GM_NAAM === citySelectedCurr) {
-                    updateFlowMap('ALL');
-                    citySelectedCurr = 'ALL';
-                } else {
-                    updateFlowMap(d.properties.GM_NAAM);
-                    citySelectedCurr = d.properties.GM_NAAM;
-                }
-                */
-
+                console.log(d.properties.GM_NAAM);
             });
 
         //compute
@@ -486,7 +473,6 @@ function initBaseMap() {
                 VIS.map_width / 2 - center[1]
             ];
         });
-
 
         setTimeout(callback, 200);
     }
@@ -534,6 +520,28 @@ function initBaseMap() {
             VIS.ctx.fillText(i + 1, VIS.centerOnTexture[cityName][0] - 35, VIS.centerOnTexture[cityName][1] + 35);
             //VIS.ctx.fillText(cityName, VIS.centerOnTexture[cityName][0], VIS.centerOnTexture[cityName][1]);
         });
+
+
+        for (var i = 0; i < 5; i++) {
+            if (i == 0) {
+
+                VIS.ctx.fillStyle = "black";
+                VIS.ctx.font = '40pt Arial';
+                VIS.ctx.textAlign = "center";
+                VIS.ctx.textBaseline = "middle";
+                VIS.ctx.fillText('legend: class', VIS.map_length - 600, 400);
+
+            } else {
+                VIS.ctx.fillStyle = "black";
+                VIS.ctx.font = '40pt Arial';
+                VIS.ctx.textAlign = "center";
+                VIS.ctx.textBaseline = "middle";
+                VIS.ctx.fillText(i, VIS.map_length -  100*i, 460);
+
+            }
+
+        }
+
 
         VIS.texture.needsUpdate = true;
     }
