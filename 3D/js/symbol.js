@@ -22,8 +22,7 @@ function creatLegends(representationCurr) {
 
         var group = new THREE.Group();
 
-        console.log(VIS.scaleHeight.range());
-
+        //console.log(VIS.scaleHeight.range());
 
         // var height = VIS.scaleHeight(item.value);
 
@@ -50,9 +49,6 @@ function creatLegends(representationCurr) {
 
         var group = new THREE.Group();
 
-
-        console.log(VIS.scaleWidth.range());
-
         VIS.scaleWidth.range().forEach(function(d, i) {
 
             if (i != 0) {
@@ -77,20 +73,15 @@ function creatLegends(representationCurr) {
 function getMeshFromFlow(flow, choosen_index, flow_index) {
 
 
-    var representation = $('input[name="layercontrol"]:checked').val();
-
-    dataEncoded = $('input[name="datacontrol"]:checked').val();
-
-
-    switch (representation) {
+    switch (representationCurr) {
 
 
         case 'height':
-            return createTubes3DHeight(flow, dataEncoded, choosen_index);
+            return createTubes3DHeight(flow, dataEncodedCurr, choosen_index);
             break;
 
         case 'width':
-            return createTubesWidth(flow, dataEncoded, choosen_index);
+            return createTubesWidth(flow, dataEncodedCurr, choosen_index);
             break;
 
             /*

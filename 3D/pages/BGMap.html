@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>3D Flow Map</title>
+    <!-- Mapbox -->
+    <script src='https://api.mapbox.com/mapbox-gl-js/v0.50.0/mapbox-gl.js'></script>
+    <link href='https://api.mapbox.com/mapbox-gl-js/v0.50.0/mapbox-gl.css' rel='stylesheet' />
+    <!-- D3 -->
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://d3js.org/d3-color.v1.min.js"></script>
+    <script src="https://d3js.org/d3-scale.v2.min.js"></script>
+    <script src="https://d3js.org/d3-array.v1.min.js"></script>
+    <script src="https://d3js.org/d3-geo.v1.min.js"></script>
+    <!-- Three.js -->
+    <script src="https://rawgit.com/mrdoob/three.js/master/build/three.min.js"></script>
+    <script src="https://rawgit.com/mrdoob/three.js/master/examples/js/controls/TrackballControls.js"></script>
+    <script src="https://rawgit.com/mrdoob/three.js/master/examples/js/renderers/CSS3DRenderer.js"></script>
+    <script src="https://rawgit.com/mrdoob/three.js/master/examples/js/renderers/SVGRenderer.js"></script>
+    <!-- jquery -->
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <!-- Tween -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tween.js/17.2.0/Tween.js"></script>
+    <!-- Custom CSS -->
+    <link href="../css/style.css" rel="stylesheet">
+</head>
+
+<body onload="visStart('BG')">
+    <div id="map"></div>
+    <div id="dataset_panel">
+        <table class="table bg-info" id="datapanel">
+            <thead>
+                <tr>
+                    <td>Choose map</td>
+                </tr>
+            </thead>
+            <tr>
+                <td>BG1</td>
+                <td><input type="radio" name="mapCodeSub" checked value="BG1"></td>
+            </tr>
+            <tr>
+                <td>BG2</td>
+                <td><input type="radio" name="mapCodeSub"  value="BG2"></td>
+            </tr>
+            <tr>
+                <td>BG3</td>
+                <td><input type="radio" name="mapCodeSub"  value="BG3"></td>
+            </tr>
+            <tr>
+                <td>BG4</td>
+                <td><input type="radio" name="mapCodeSub"  value="BG4"></td>
+            </tr>
+           
+
+        </table>
+    </div>
+   
+    <!-- Custom Theme JavaScript -->
+    <!--script src="../lib/d3-threeD.js"></script-->
+    <script src="../libs/DragControls.js"></script>
+    <script src="../libs/TrackballControls.js"></script>
+    <script src="../js/data.js"></script>
+    <script src="../js/conf.js"></script>
+    <script src="../js/symbol.js"></script>
+    <script src="../js/vis.js"></script>
+    <script src="../js/main.js"></script>
+</body>
+
+</html>

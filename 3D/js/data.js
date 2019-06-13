@@ -2,9 +2,13 @@
  * Created by Aero on 08/03/2017.
  */
 
+
+var mapName;
+
 function loadData(callback){
 
-    var DATA_PATH = "../data/mData-" + $('input[name="municipality"]:checked').val() + ".json";
+    var DATA_PATH = "../data/mData-" + mapName + ".json";
+    //console.log(mapName)
 
 
     d3.json( DATA_PATH)
@@ -19,27 +23,6 @@ function loadData(callback){
 
             // from - to
             dataChord = chord(data.matrix);
-
-            //Transposing
-
-            /*
-            var matrix_T = data.matrix;
-            matrix_T = matrix_T[0].map((col, i) => matrix_T.map(row => row[i]));
-
-            dataChordT = chord(matrix_T);
-
-
-            var matrix_C  = data.matrix.slice();
-
-            matrix_C = matrix_C.map(function (row , i) {
-
-                return row.map(function (cell,j) {
-                    return cell+ matrix_T[i][j];
-                })
-            });
-
-            dataChordC = chord(matrix_C);
-            */
         } );
 
 

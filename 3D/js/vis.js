@@ -2,23 +2,10 @@
  * Created by Aero on 23/11/2018.
  */
 
-var INTERSECTED;
-var citySelectedCurr = "ALL";
 
-var representationCurr = $('input[name="layercontrol"]:checked').val();
-
-
-if ($('input[name="municipality"]:checked').val() == "Utrecht") {
-    citySelectedCurr = "Utrecht";
-}
-if ($('input[name="municipality"]:checked').val() == "Friesland") {
-
-    citySelectedCurr = "Leeuwarden";
-}
-if ($('input[name="municipality"]:checked').val() == "Groningen") {
-
-    citySelectedCurr = "Groningen";
-}
+var citySelectedCurr;
+var representationCurr;
+var dataEncodedCurr;
 
 var dataEncoded = $('input[name="datacontrol"]:checked').val();
 
@@ -104,11 +91,10 @@ var VIS = {
     angle2heightZ: 1,
     color: null,
     classes: {
-
-        "Utrecht" :[41, 121, 318],
-        "Leeuwarden" :  [27, 89, 205],
+        "Utrecht": [41, 121, 318],
+        "Friesland": [27, 89, 205],
         "Groningen": [25, 74, 187]
-    }, 
+    },
 
 }
 
@@ -116,7 +102,29 @@ function vis3DFlowMap() {
 
     initialize(function() {
         initBaseMap();
+
+
+        var mapConfName = "CONF." + $('input[name="mapCodeSub"]:checked').val();
+        citySelectedCurr = eval(mapConfName)[0];
+        representationCurr = eval(mapConfName)[2];
+        dataEncodedCurr = eval(mapConfName)[3];
+
+
+
         updateFlowMap(citySelectedCurr);
+
+
+        $('input[name="mapCodeSub"]').change(function() {
+
+            var mapConfName = "CONF." + $('input[name="mapCodeSub"]:checked').val();
+
+            citySelectedCurr = eval(mapConfName)[0];
+            representationCurr = eval(mapConfName)[2];
+            dataEncodedCurr = eval(mapConfName)[3];
+
+            updateFlowMap(citySelectedCurr);
+
+        });
     });
 
 }
@@ -135,32 +143,22 @@ function initialize(callback) {
 
     VIS.groupMapCityUI = createGroupforUI();
 
-    $('input[name="layercontrol"]').change(function(e) {
-        updateFlowMap(citySelectedCurr);
-    });
-
-    $('input[name="datacontrol"]').change(function(e) {
-        updateFlowMap(citySelectedCurr);
-    });
-
 
     function createProjection() {
 
         var center = null;
         var scale;
 
-        var cityChoosen = $('input[name="municipality"]:checked').val();
 
-
-        if (cityChoosen == "Utrecht") {
+        if (mapName == "Utrecht") {
             center = VIS.centerUtrecht;
             scale = VIS.scaleUtrecht;
         }
-        if (cityChoosen == "Friesland") {
+        if (mapName == "Friesland") {
             center = VIS.centerFriesland;
             scale = VIS.scaleFriesland;
         }
-        if (cityChoosen == "Groningen") {
+        if (mapName == "Groningen") {
             center = VIS.centerGroningen;
             scale = VIS.scaleGroningen;
         }
@@ -301,7 +299,7 @@ function initialize(callback) {
 
     function createScaleQuantizeHeight(citySelectedCurr) {
 
-        var obj = "VIS.classes." + citySelectedCurr;
+        var obj = "VIS.classes." + mapName;
 
         var array = [].concat(...dataFlows.matrix).filter(d => d != 0);
 
@@ -318,9 +316,7 @@ function initialize(callback) {
         //var classes = [1, mean_left, mean, mean_right];
 
         var classes = [1];
-        classes = classes.concat( eval(obj));
-
-        console.log( citySelectedCurr,  eval(obj), classes);
+        classes = classes.concat(eval(obj));
 
         var rangeSpace = [0, 0.25, 0.5, 0.75, 1];
         rangeSpace = rangeSpace.map(d => d * VIS.maxValueZ)
@@ -332,8 +328,8 @@ function initialize(callback) {
     }
 
     function createScaleQuantizeWidth(citySelectedCurr) {
-        var obj = "VIS.classes." +citySelectedCurr;
-        
+        var obj = "VIS.classes." + mapName;
+
         var array = [].concat(...dataFlows.matrix).filter(d => d != 0);
 
         array = array.sort((a, b) => { return a - b; });
@@ -349,7 +345,7 @@ function initialize(callback) {
         //var classes = [1, mean_left, mean, mean_right];
 
         var classes = [1];
-        classes = classes.concat( eval(obj));
+        classes = classes.concat(eval(obj));
 
         var rangeSpace = [0, 0.2, 0.5, 0.8, 1];
         rangeSpace = rangeSpace.map(d => d * VIS.maxValueWidth)
@@ -464,6 +460,10 @@ function initBaseMap() {
             })
             .on("dblclick", function(d) {
 
+                console.log(d.properties.GM_NAAM)
+
+
+                /*
                 if (d.properties.GM_NAAM === citySelectedCurr) {
                     updateFlowMap('ALL');
                     citySelectedCurr = 'ALL';
@@ -471,6 +471,7 @@ function initBaseMap() {
                     updateFlowMap(d.properties.GM_NAAM);
                     citySelectedCurr = d.properties.GM_NAAM;
                 }
+                */
 
             });
 
@@ -542,8 +543,7 @@ function initBaseMap() {
 
 function updateFlowMap(selectedCity) {
 
-
-    updateLegend($('input[name="layercontrol"]:checked').val());
+    updateLegend(representationCurr);
 
 
     if (selectedCity === "ALL") {

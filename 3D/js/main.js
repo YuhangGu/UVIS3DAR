@@ -1,5 +1,5 @@
 /**
- * Created by Aero on 15/02/2017.
+ * Created by Aero on 15/6/2019.
  */
 
 var dataFlows;
@@ -26,38 +26,31 @@ const DIGIT_0 = 48,
     MINUS = 45;
 
 
-function visStart(e) {
+
+
+
+function visStart(mapCode) {
+
+    switch (mapCode) {
+
+        case 'TU':
+            mapName = 'Utrecht';
+            break;
+        case 'AF':
+        case 'BF':
+            mapName = 'Friesland';
+            break;
+        case 'AG':
+        case 'BG':
+            mapName = 'Groningen';
+            break;
+    }
+
+
 
     loadData(function() {
 
         vis3DFlowMap();
     });
 
-
-    $('input[name="municipality"]').change(function(e) {
-
-        //cancelAnimationFrame(this.id);
-
-        document.getElementById("map").removeChild(VIS.cssRenderer.domElement);
-        document.getElementById("map").removeChild(VIS.glRenderer.domElement);
-
-        if ($('input[name="municipality"]:checked').val() == "Utrecht") {
-            citySelectedCurr = "Utrecht";
-        }
-        if ($('input[name="municipality"]:checked').val() == "Friesland") {
-
-            citySelectedCurr = "Leeuwarden";
-        }
-        if ($('input[name="municipality"]:checked').val() == "Groningen") {
-
-            citySelectedCurr = "Groningen";
-        }
-
-
-        loadData(function() {
-            vis3DFlowMap();
-        });
-
-
-    });
 }
