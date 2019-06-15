@@ -16,13 +16,13 @@ const CONF = {
 
     "AG1": ["Slochteren", "14", "height", "out"],
     "AG2": ["Hoogezand-Sappemeer", "9", "height", "in"],
-    "AG3": ["Grootegast", "1", "width", "out"],
-    "AG4": ["Haren", "13", "width", "in"],
+    "AG3": ["Grootegast", "7", "width", "out"],
+    "AG4": ["Haren", "8", "width", "in"],
 
 
     "BF1": ["Franekeradeel", "5", "height", "out"],
     "BF2": ["Leeuwarden", "9", "height", "in"],
-    "BF3": ["Ooststellingwerf", "7", "width", "out"],
+    "BF3": ["Ooststellingwerf", "11", "width", "out"],
     "BF4": ["De Fryske Marren", "24", "width", "in"],
 
     
