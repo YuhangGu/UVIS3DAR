@@ -5,8 +5,10 @@
 
 const CONF = {
   
-    "TU1": ["IJsselstein", "18", "width", "out"],
-    "TU2": ["Zeist", "19", "height", "in"],
+    "TU1": ["Zeist", "19", "height", "in"],
+    "TU2": ["IJsselstein", "18", "width", "out"],
+    "TU3": ["Zeist", "19", "height", "in"],
+    "TU4": ["IJsselstein", "18", "width", "out"],
 
     "AF1": ["Leeuwarden", "9", "height", "out"],
     "AF2": ["Smallingerland", "14", "height", "in"],
@@ -24,6 +26,7 @@ const CONF = {
     "BF3": ["Ooststellingwerf", "11", "width", "out"],
     "BF4": ["De Fryske Marren", "24", "width", "in"],
 
+    
     "BG1": ["Veendam", "15", "height", "out"],
     "BG2": ["Leek", "10", "height", "in"],
     "BG3": ["Menterwolde", "23", "width", "out"],
