@@ -5,10 +5,10 @@
 
 const CONF = {
   
-    "TU1": ["Zeist", "19", "height", "in"],
-    "TU2": ["IJsselstein", "18", "width", "out"],
-    "TU3": ["Zeist", "19", "height", "in"],
-    "TU4": ["IJsselstein", "18", "width", "out"],
+    "TU1": ["IJsselstein", "18", "width", "out"],
+    "TU2": ["Zeist", "19", "height", "in"],
+    "TU3": ["IJsselstein", "18", "width", "out"],
+    "TU4": ["Zeist", "19", "height", "in"],
 
     "AF1": ["Leeuwarden", "9", "height", "out"],
     "AF2": ["Smallingerland", "14", "height", "in"],
